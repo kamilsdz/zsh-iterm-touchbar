@@ -113,7 +113,9 @@ function _unbindTouchbar() {
 function setKey(){
   pecho "\033]1337;SetKeyLabel=F${1}=${2}\a"
   if [ "$4" != "-q" ]; then
-    bindkey -s $fnKeys[$1] "$3 \n"
+    if [ "$fnKeys[$1]" != "" ]; then
+      bindkey -s $fnKeys[$1] "$3 \n"
+    fi
   else
     bindkey $fnKeys[$1] $3
   fi
@@ -223,7 +225,7 @@ function _displayYarnScripts() {
 
 function _displayBranches() {
   # List of branches for current repo
-  gitBranches=($(node -e "console.log('$(echo $(git branch))'.split(/[ ,]+/).toString().split(',').join(' ').toString().replace('* ', ''))"))
+  gitBranches=($(node -e "console.log('$(echo $(git branch --sort=-committerdate))'.split(/[ ,]+/).toString().split(',').join(' ').toString().replace('* ', ''))"))
 
   _clearTouchbar
   _unbindTouchbar
@@ -235,7 +237,7 @@ function _displayBranches() {
   # for each branch name, bind it to a key
   for branch in "$gitBranches[@]"; do
     fnKeysIndex=$((fnKeysIndex + 1))
-    setKey $fnKeysIndex $branch "git checkout $branch"
+    setKey $fnKeysIndex $branch "git checkout '$branch'"
   done
 
   setKey 1 "👈 back" _displayDefault '-q'
@@ -278,3 +280,4 @@ precmd_iterm_touchbar() {
 
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd precmd_iterm_touchbar
+
