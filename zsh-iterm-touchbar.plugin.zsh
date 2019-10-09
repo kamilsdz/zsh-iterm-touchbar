@@ -159,26 +159,38 @@ function _displayDefault() {
 
     setKey 2 "🎋 `git_current_branch`" _displayBranches '-q'
     setKey 3 $touchbarIndicators "git status"
-    setKey 4 "🔼 push" "git push origin $(git_current_branch)"
-    setKey 5 "🔽 pull" "git pull origin $(git_current_branch)"
+    setKey 4 "🔼 push" "git push origin '$(git_current_branch)'"
+    setKey 5 "🔽 pull" "git pull origin '$(git_current_branch)'"
+    setKey 6 "🐳 compose up" "docker-compose up"
+    setKey 7 "🕹 compose web bash" "docker-compose exec web bash"
+    setKey 8 "🚂 rails c" "docker-compose exec web bin/rails c"
+    setKey 9 "💎 rspec" "docker-compose exec web bin/rspec"
+    setKey 10 "👮 rubocop" "docker-compose exec web bin/rubocop"
+    setKey 11 "😃 Relax!" "open https://www.youtube.com/watch?v=dQw4w9WgXcQ"
   else
     clearKey 2
     clearKey 3
     clearKey 4
     clearKey 5
+    clearKey 6
+    clearKey 7
+    clearKey 8
+    clearKey 9
+    clearKey 10
+    clearKey 11
   fi
 
   # PACKAGE.JSON
   # ------------
-  if [[ $(find-up package.json) != "" ]]; then
-      if [[ $(find-up yarn.lock) != "" ]] && [[ "$YARN_ENABLED" = true ]]; then
-          setKey 6 "🐱 yarn-run" _displayYarnScripts '-q'
-      else
-          setKey 6 "⚡️ npm-run" _displayNpmScripts '-q'
-    fi
-  else
-      clearKey 6
-  fi
+  #  if [[ $(find-up package.json) != "" ]]; then
+  #      if [[ $(find-up yarn.lock) != "" ]] && [[ "$YARN_ENABLED" = true ]]; then
+  #          setKey 6 "🐱 yarn-run" _displayYarnScripts '-q'
+  #      else
+  #          setKey 6 "⚡️ npm-run" _displayNpmScripts '-q'
+  #    fi
+  #  else
+  #      clearKey 6
+  #  fi
 }
 
 function _displayNpmScripts() {
@@ -280,4 +292,3 @@ precmd_iterm_touchbar() {
 
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd precmd_iterm_touchbar
-
